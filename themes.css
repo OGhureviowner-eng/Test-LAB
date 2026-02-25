@@ -1,0 +1,326 @@
+/* ═══════════════════════════════════════════════════════
+   DEVLAB — 30 THEMES
+   Usage: <html data-theme="theme-name">
+   20 Dark + 10 Light
+═══════════════════════════════════════════════════════ */
+
+/* ── 1. CATPPUCCIN MOCHA (default) ── */
+[data-theme="mocha"] {
+  --bg:#1e1e2e; --bg2:#181825; --bg3:#252535; --bg4:#2a2a3d;
+  --surface:#313244; --border:#45475a;
+  --text:#cdd6f4; --text2:#a6adc8; --text3:#6c7086;
+  --accent:#cba6f7; --accent2:#89b4fa;
+  --green:#a6e3a1; --red:#f38ba8; --yellow:#f9e2af;
+  --orange:#fab387; --teal:#94e2d5; --pink:#f5c2e7;
+}
+
+/* ── 2. DRACULA ── */
+[data-theme="dracula"] {
+  --bg:#282a36; --bg2:#21222c; --bg3:#2f3140; --bg4:#353746;
+  --surface:#44475a; --border:#6272a4;
+  --text:#f8f8f2; --text2:#d0d0d0; --text3:#6272a4;
+  --accent:#bd93f9; --accent2:#8be9fd;
+  --green:#50fa7b; --red:#ff5555; --yellow:#f1fa8c;
+  --orange:#ffb86c; --teal:#8be9fd; --pink:#ff79c6;
+}
+
+/* ── 3. ONE DARK ── */
+[data-theme="one-dark"] {
+  --bg:#282c34; --bg2:#21252b; --bg3:#2c313c; --bg4:#323844;
+  --surface:#3e4451; --border:#4b5263;
+  --text:#abb2bf; --text2:#828997; --text3:#5c6370;
+  --accent:#c678dd; --accent2:#61afef;
+  --green:#98c379; --red:#e06c75; --yellow:#e5c07b;
+  --orange:#d19a66; --teal:#56b6c2; --pink:#be5046;
+}
+
+/* ── 4. NORD ── */
+[data-theme="nord"] {
+  --bg:#2e3440; --bg2:#242933; --bg3:#353b49; --bg4:#3b4252;
+  --surface:#434c5e; --border:#4c566a;
+  --text:#eceff4; --text2:#d8dee9; --text3:#6b7a96;
+  --accent:#b48ead; --accent2:#88c0d0;
+  --green:#a3be8c; --red:#bf616a; --yellow:#ebcb8b;
+  --orange:#d08770; --teal:#8fbcbb; --pink:#b48ead;
+}
+
+/* ── 5. TOKYO NIGHT ── */
+[data-theme="tokyo-night"] {
+  --bg:#1a1b26; --bg2:#13141f; --bg3:#1f2335; --bg4:#24283b;
+  --surface:#292e42; --border:#3b4261;
+  --text:#c0caf5; --text2:#9aa5ce; --text3:#565f89;
+  --accent:#bb9af7; --accent2:#7aa2f7;
+  --green:#9ece6a; --red:#f7768e; --yellow:#e0af68;
+  --orange:#ff9e64; --teal:#73daca; --pink:#f7768e;
+}
+
+/* ── 6. GRUVBOX DARK ── */
+[data-theme="gruvbox-dark"] {
+  --bg:#282828; --bg2:#1d2021; --bg3:#32302f; --bg4:#3c3836;
+  --surface:#504945; --border:#665c54;
+  --text:#ebdbb2; --text2:#d5c4a1; --text3:#a89984;
+  --accent:#d3869b; --accent2:#83a598;
+  --green:#b8bb26; --red:#fb4934; --yellow:#fabd2f;
+  --orange:#fe8019; --teal:#8ec07c; --pink:#d3869b;
+}
+
+/* ── 7. SYNTHWAVE 84 ── */
+[data-theme="synthwave"] {
+  --bg:#1a1a2e; --bg2:#16213e; --bg3:#0f3460; --bg4:#1a1a3e;
+  --surface:#2d2d52; --border:#3d3d7a;
+  --text:#f0f0ff; --text2:#c0c0e8; --text3:#6060a0;
+  --accent:#ff2d78; --accent2:#00e5ff;
+  --green:#72f1b8; --red:#ff2d78; --yellow:#fede5d;
+  --orange:#f97e72; --teal:#00e5ff; --pink:#ff7edb;
+}
+
+/* ── 8. ROSE PINE ── */
+[data-theme="rose-pine"] {
+  --bg:#191724; --bg2:#12101e; --bg3:#1f1d2e; --bg4:#26233a;
+  --surface:#403d52; --border:#524f67;
+  --text:#e0def4; --text2:#c4c1d8; --text3:#6e6a86;
+  --accent:#c4a7e7; --accent2:#9ccfd8;
+  --green:#31748f; --red:#eb6f92; --yellow:#f6c177;
+  --orange:#f6c177; --teal:#9ccfd8; --pink:#eb6f92;
+}
+
+/* ── 9. KANAGAWA ── */
+[data-theme="kanagawa"] {
+  --bg:#1f1f28; --bg2:#16161d; --bg3:#2a2a37; --bg4:#363646;
+  --surface:#363646; --border:#54546d;
+  --text:#dcd7ba; --text2:#c8c093; --text3:#727169;
+  --accent:#957fb8; --accent2:#7e9cd8;
+  --green:#76946a; --red:#c34043; --yellow:#c0a36e;
+  --orange:#ffa066; --teal:#6a9589; --pink:#d27e99;
+}
+
+/* ── 10. MATRIX ── */
+[data-theme="matrix"] {
+  --bg:#000000; --bg2:#001100; --bg3:#001800; --bg4:#002200;
+  --surface:#003300; --border:#004400;
+  --text:#00ff41; --text2:#00cc33; --text3:#006622;
+  --accent:#00ff41; --accent2:#33ff66;
+  --green:#00ff41; --red:#ff2222; --yellow:#ccff33;
+  --orange:#88ff44; --teal:#00ffcc; --pink:#66ff99;
+}
+
+/* ── 11. MONOKAI ── */
+[data-theme="monokai"] {
+  --bg:#272822; --bg2:#1e1f1c; --bg3:#2f3024; --bg4:#353629;
+  --surface:#49483e; --border:#75715e;
+  --text:#f8f8f2; --text2:#cfcfc2; --text3:#75715e;
+  --accent:#ae81ff; --accent2:#66d9e8;
+  --green:#a6e22e; --red:#f92672; --yellow:#e6db74;
+  --orange:#fd971f; --teal:#66d9e8; --pink:#f92672;
+}
+
+/* ── 12. COBALT ── */
+[data-theme="cobalt"] {
+  --bg:#002240; --bg2:#001830; --bg3:#003060; --bg4:#004080;
+  --surface:#005080; --border:#0060a0;
+  --text:#ffffff; --text2:#c0d8f0; --text3:#6090c0;
+  --accent:#ff9d00; --accent2:#00bfff;
+  --green:#3ad900; --red:#ff2200; --yellow:#ffc600;
+  --orange:#ff9d00; --teal:#00bfff; --pink:#ff80c0;
+}
+
+/* ── 13. AYU DARK ── */
+[data-theme="ayu-dark"] {
+  --bg:#0d1017; --bg2:#0a0e15; --bg3:#131720; --bg4:#1a1f2a;
+  --surface:#1c2533; --border:#2d3640;
+  --text:#bfbdb6; --text2:#acb6bf; --text3:#5f6672;
+  --accent:#d2a6ff; --accent2:#59c2ff;
+  --green:#aad94c; --red:#f07178; --yellow:#ffb454;
+  --orange:#ff8f40; --teal:#95e6cb; --pink:#f07178;
+}
+
+/* ── 14. PALENIGHT ── */
+[data-theme="palenight"] {
+  --bg:#292d3e; --bg2:#202331; --bg3:#303347; --bg4:#363a4f;
+  --surface:#444267; --border:#585b70;
+  --text:#a6accd; --text2:#8b90b0; --text3:#676e95;
+  --accent:#c792ea; --accent2:#82aaff;
+  --green:#c3e88d; --red:#f07178; --yellow:#ffcb6b;
+  --orange:#f78c6c; --teal:#89ddff; --pink:#ff869a;
+}
+
+/* ── 15. GITHUB DARK ── */
+[data-theme="github-dark"] {
+  --bg:#0d1117; --bg2:#010409; --bg3:#161b22; --bg4:#1c2128;
+  --surface:#21262d; --border:#30363d;
+  --text:#e6edf3; --text2:#b1bac4; --text3:#6e7681;
+  --accent:#d2a8ff; --accent2:#79c0ff;
+  --green:#7ee787; --red:#ff7b72; --yellow:#e3b341;
+  --orange:#ffa657; --teal:#56d364; --pink:#f778ba;
+}
+
+/* ── 16. NIGHT OWL ── */
+[data-theme="night-owl"] {
+  --bg:#011627; --bg2:#010e1c; --bg3:#081f2d; --bg4:#0d2b3e;
+  --surface:#163d4c; --border:#1d5063;
+  --text:#d6deeb; --text2:#a7b0c0; --text3:#5f7e97;
+  --accent:#c792ea; --accent2:#82aaff;
+  --green:#22da6e; --red:#ef5350; --yellow:#ecc48d;
+  --orange:#f78c6c; --teal:#21c7a8; --pink:#ff869a;
+}
+
+/* ── 17. COFFEE ── */
+[data-theme="coffee"] {
+  --bg:#1c1412; --bg2:#160f0e; --bg3:#241a17; --bg4:#2e221f;
+  --surface:#3d2f2a; --border:#5a3f39;
+  --text:#e8d5c0; --text2:#c5a882; --text3:#7a5c4a;
+  --accent:#c9956c; --accent2:#d4a853;
+  --green:#a8c97d; --red:#d46b4b; --yellow:#d4a853;
+  --orange:#c9956c; --teal:#80b4a5; --pink:#c08090;
+}
+
+/* ── 18. OBSIDIAN ── */
+[data-theme="obsidian"] {
+  --bg:#0a0a0a; --bg2:#000000; --bg3:#141414; --bg4:#1e1e1e;
+  --surface:#282828; --border:#3c3c3c;
+  --text:#e8e8e8; --text2:#b0b0b0; --text3:#606060;
+  --accent:#d4ac0d; --accent2:#e8d44d;
+  --green:#5cb85c; --red:#d9534f; --yellow:#d4ac0d;
+  --orange:#e5872a; --teal:#5bc0de; --pink:#e8739c;
+}
+
+/* ── 19. SOLARIZED DARK ── */
+[data-theme="solarized-dark"] {
+  --bg:#002b36; --bg2:#00212b; --bg3:#073642; --bg4:#0d4052;
+  --surface:#073642; --border:#124f60;
+  --text:#839496; --text2:#657b83; --text3:#586e75;
+  --accent:#d33682; --accent2:#268bd2;
+  --green:#859900; --red:#dc322f; --yellow:#b58900;
+  --orange:#cb4b16; --teal:#2aa198; --pink:#d33682;
+}
+
+/* ── 20. CATPPUCCIN FRAPPE ── */
+[data-theme="frappe"] {
+  --bg:#303446; --bg2:#292c3c; --bg3:#363a4f; --bg4:#414559;
+  --surface:#51576d; --border:#626880;
+  --text:#c6d0f5; --text2:#b5bfe2; --text3:#737994;
+  --accent:#ca9ee6; --accent2:#8caaee;
+  --green:#a6d189; --red:#e78284; --yellow:#e5c890;
+  --orange:#ef9f76; --teal:#81c8be; --pink:#f4b8e4;
+}
+
+/* ═══════════════════════════════
+   LIGHT THEMES (10)
+═══════════════════════════════ */
+
+/* ── 21. GITHUB LIGHT ── */
+[data-theme="github-light"] {
+  --bg:#ffffff; --bg2:#f6f8fa; --bg3:#f0f2f5; --bg4:#e8ebef;
+  --surface:#e4e7ec; --border:#d0d7de;
+  --text:#24292f; --text2:#57606a; --text3:#8c959f;
+  --accent:#8250df; --accent2:#0550ae;
+  --green:#116329; --red:#a40e26; --yellow:#9a6700;
+  --orange:#953800; --teal:#0e7490; --pink:#bf3989;
+}
+
+/* ── 22. SOLARIZED LIGHT ── */
+[data-theme="solarized-light"] {
+  --bg:#fdf6e3; --bg2:#eee8d5; --bg3:#f5ede0; --bg4:#e8dfc5;
+  --surface:#e4d8b0; --border:#d9c99a;
+  --text:#657b83; --text2:#586e75; --text3:#93a1a1;
+  --accent:#6c71c4; --accent2:#268bd2;
+  --green:#859900; --red:#dc322f; --yellow:#b58900;
+  --orange:#cb4b16; --teal:#2aa198; --pink:#d33682;
+}
+
+/* ── 23. ONE LIGHT ── */
+[data-theme="one-light"] {
+  --bg:#fafafa; --bg2:#f0f0f0; --bg3:#f5f5f5; --bg4:#ebebeb;
+  --surface:#e5e5e5; --border:#d3d3d3;
+  --text:#383a42; --text2:#696c77; --text3:#a0a1a7;
+  --accent:#a626a4; --accent2:#4078f2;
+  --green:#50a14f; --red:#e45649; --yellow:#986801;
+  --orange:#c18401; --teal:#0184bc; --pink:#ca1243;
+}
+
+/* ── 24. GRUVBOX LIGHT ── */
+[data-theme="gruvbox-light"] {
+  --bg:#fbf1c7; --bg2:#f2e5bc; --bg3:#f9efb7; --bg4:#f0e3a7;
+  --surface:#ebdbb2; --border:#d5c4a1;
+  --text:#3c3836; --text2:#504945; --text3:#7c6f64;
+  --accent:#8f3f71; --accent2:#076678;
+  --green:#79740e; --red:#9d0006; --yellow:#b57614;
+  --orange:#af3a03; --teal:#427b58; --pink:#8f3f71;
+}
+
+/* ── 25. CATPPUCCIN LATTE ── */
+[data-theme="latte"] {
+  --bg:#eff1f5; --bg2:#e6e9ef; --bg3:#eaecf0; --bg4:#e0e3e9;
+  --surface:#dce0e8; --border:#ccd0da;
+  --text:#4c4f69; --text2:#5c5f77; --text3:#9ca0b0;
+  --accent:#8839ef; --accent2:#1e66f5;
+  --green:#40a02b; --red:#d20f39; --yellow:#df8e1d;
+  --orange:#fe640b; --teal:#179299; --pink:#ea76cb;
+}
+
+/* ── 26. PAPER ── */
+[data-theme="paper"] {
+  --bg:#ffffff; --bg2:#f8f8f8; --bg3:#f2f2f2; --bg4:#ececec;
+  --surface:#e6e6e6; --border:#cccccc;
+  --text:#111111; --text2:#444444; --text3:#888888;
+  --accent:#0055cc; --accent2:#880000;
+  --green:#006633; --red:#880000; --yellow:#885500;
+  --orange:#884400; --teal:#005566; --pink:#880066;
+}
+
+/* ── 27. ROSE PINE DAWN ── */
+[data-theme="rose-pine-dawn"] {
+  --bg:#faf4ed; --bg2:#f2e9de; --bg3:#f7f0e8; --bg4:#ede8df;
+  --surface:#e4dfda; --border:#d4d0cc;
+  --text:#575279; --text2:#797593; --text3:#9893a5;
+  --accent:#907aa9; --accent2:#286983;
+  --green:#56949f; --red:#b4637a; --yellow:#ea9d34;
+  --orange:#d7827e; --teal:#56949f; --pink:#b4637a;
+}
+
+/* ── 28. AYU LIGHT ── */
+[data-theme="ayu-light"] {
+  --bg:#fafafa; --bg2:#f0f0f0; --bg3:#f5f5f5; --bg4:#ebebeb;
+  --surface:#e5e5e5; --border:#d1d1d1;
+  --text:#575f66; --text2:#787e85; --text3:#abb0b6;
+  --accent:#a37acc; --accent2:#399ee6;
+  --green:#86b300; --red:#f07171; --yellow:#fa8d3e;
+  --orange:#f2ae49; --teal:#4cbf99; --pink:#f07171;
+}
+
+/* ── 29. SEPIA ── */
+[data-theme="sepia"] {
+  --bg:#f4ecd8; --bg2:#ede0c4; --bg3:#f0e8d0; --bg4:#e8dcc0;
+  --surface:#ddd0a8; --border:#c8b890;
+  --text:#3d2b1f; --text2:#5c4033; --text3:#8b6450;
+  --accent:#6b3a2a; --accent2:#2a5a6b;
+  --green:#3a6b2a; --red:#8b1a1a; --yellow:#7a6a1a;
+  --orange:#8b4a1a; --teal:#1a5a5a; --pink:#6b2a4a;
+}
+
+/* ── 30. ARCTIC ── */
+[data-theme="arctic"] {
+  --bg:#f0f5ff; --bg2:#e8eeff; --bg3:#edf2ff; --bg4:#e2e9ff;
+  --surface:#d8e2ff; --border:#c0ccee;
+  --text:#1a2744; --text2:#3a4a70; --text3:#6070a0;
+  --accent:#5050dd; --accent2:#0088cc;
+  --green:#008844; --red:#cc2200; --yellow:#886600;
+  --orange:#aa4400; --teal:#006688; --pink:#882266;
+}
+
+/* ═══════════════════════════════
+   STATUS BAR — adapts to theme
+═══════════════════════════════ */
+[data-theme="github-light"] #statusbar,
+[data-theme="solarized-light"] #statusbar,
+[data-theme="one-light"] #statusbar,
+[data-theme="gruvbox-light"] #statusbar,
+[data-theme="latte"] #statusbar,
+[data-theme="paper"] #statusbar,
+[data-theme="rose-pine-dawn"] #statusbar,
+[data-theme="ayu-light"] #statusbar,
+[data-theme="sepia"] #statusbar,
+[data-theme="arctic"] #statusbar {
+  background: var(--accent);
+  color: #fff;
+}
