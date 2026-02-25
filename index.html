@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dracula">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DevLab — Programmer's Laboratory</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+<!-- CodeMirror Core -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.css"/>
+
+<!-- App Styles -->
+<link rel="stylesheet" href="themes.css"/>
+
+<style>
+/* ═══════════════════════════════════════════
+   CSS VARIABLES — overridden per theme
+═══════════════════════════════════════════ */
+:root {
+  --bg:        #1e1f2e;
+  --bg2:       #16172b;
+  --bg3:       #252636;
+  --bg4:       #2d2e43;
+  --surface:   #323447;
+  --border:    #404258;
+  --text:      #cdd6f4;
+  --text2:     #a6adc8;
+  --text3:     #6c7086;
+  --accent:    #cba6f7;
+  --accent2:   #89b4fa;
+  --green:     #a6e3a1;
+  --red:       #f38ba8;
+  --yellow:    #f9e2af;
+  --orange:    #fab387;
+  --teal:      #94e2d5;
+  --pink:      #f5c2e7;
+  --font-ui:   'Outfit', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+  --radius:    6px;
+  --radius-lg: 10px;
+  --sidebar-w: 220px;
+  --ref-w:     280px;
+  --topbar-h:  52px;
+  --tabs-h:    36px;
+  --status-h:  26px;
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
+*,*::before,*::after { box-sizing:border-box;margin:0;padding:0; }
+html,body { height:100%;overflow:hidden;font-family:var(--font-ui); }
+body { background:var(--bg2);color:var(--text);display:flex;flex-direction:column; }
+button,input,select,textarea { font-family:var(--font-ui); }
+::-webkit-scrollbar { width:5px;height:5px; }
+::-webkit-scrollbar-track { background:var(--bg2); }
+::-webkit-scrollbar-thumb { background:var(--border);border-radius:4px; }
+
+/* ═══════════════════════════════════════════
+   BROWSER CHROME — TOP BAR
+═══════════════════════════════════════════ */
+#topbar {
+  height:var(--topbar-h);
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  padding:0 14px;
+  gap:10px;
+  flex-shrink:0;
+  z-index:100;
+}
+
+.traffic-lights { display:flex;gap:6px;align-items:center; }
+.tl { width:12px;height:12px;border-radius:50%;cursor:pointer;transition:filter 0.2s; }
+.tl:hover { filter:brightness(1.3); }
+.tl-red    { background:#ff5f57; }
+.tl-yellow { background:#febc2e; }
+.tl-green  { background:#28c840; }
+
+.nav-btns { display:flex;gap:2px; }
+.nav-btn {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  color:var(--text3);
+  width:28px;height:28px;
+  border-radius:5px;
+  cursor:pointer;
+  font-size:0.8rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s;
+}
+.nav-btn:hover { background:var(--surface);color:var(--text); }
+
+#url-bar {
+  flex:1;
+  height:30px;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:0 14px 0 36px;
+  color:var(--text);
+  font-family:var(--font-mono);
+  font-size:0.78rem;
+  outline:none;
+  transition:border 0.2s,box-shadow 0.2s;
+  cursor:default;
+}
+#url-bar:focus { border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent); }
+
+.url-icon {
+  position:absolute;
+  left:calc(var(--sidebar-w) + 220px);
+  font-size:0.75rem;
+  color:var(--green);
+  pointer-events:none;
+}
+
+.url-wrap { position:relative;flex:1; }
+.url-lock { position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--green);font-size:0.7rem;pointer-events:none; }
+
+.topbar-right { display:flex;gap:8px;align-items:center; }
+
+#run-btn {
+  background:var(--green);
+  color:#000;
+  border:none;
+  border-radius:6px;
+  padding:5px 16px;
+  font-family:var(--font-ui);
+  font-weight:700;
+  font-size:0.8rem;
+  cursor:pointer;
+  display:flex;align-items:center;gap:6px;
+  transition:all 0.2s;
+}
+#run-btn:hover { filter:brightness(1.1);transform:translateY(-1px); }
+#run-btn.running { background:var(--red);animation:pulse 0.8s ease infinite; }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+
+.tb-btn {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  color:var(--text2);
+  padding:5px 12px;
+  border-radius:6px;
+  font-size:0.78rem;
+  cursor:pointer;
+  transition:all 0.15s;
+  white-space:nowrap;
+}
+.tb-btn:hover { border-color:var(--accent);color:var(--accent); }
+
+#theme-indicator {
+  font-family:var(--font-mono);
+  font-size:0.68rem;
+  color:var(--text3);
+  white-space:nowrap;
+}
+
+/* ═══════════════════════════════════════════
+   MAIN LAYOUT
+═══════════════════════════════════════════ */
+#app {
+  flex:1;
+  display:flex;
+  overflow:hidden;
+}
+
+/* ═══════════════════════════════════════════
+   LEFT SIDEBAR — LANGUAGE EXPLORER
+═══════════════════════════════════════════ */
+#sidebar {
+  width:var(--sidebar-w);
+  background:var(--bg);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  flex-shrink:0;
+}
+
+#sidebar-header {
+  padding:10px 14px 8px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.sidebar-title {
+  font-size:0.62rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--text3);
+  font-weight:600;
+}
+
+#lang-search {
+  width:100%;
+  margin:10px 14px;
+  width:calc(100% - 28px);
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:6px 10px 6px 28px;
+  color:var(--text);
+  font-size:0.78rem;
+  outline:none;
+  transition:border 0.2s;
+}
+#lang-search:focus { border-color:var(--accent); }
+.search-icon {
+  position:relative;
+  margin:0 14px;
+}
+.search-icon::before {
+  content:'⌕';
+  position:absolute;
+  left:8px;top:50%;transform:translateY(-50%);
+  color:var(--text3);font-size:0.85rem;
+  pointer-events:none;
+}
+.search-icon input { margin:0; }
+
+#lang-list {
+  flex:1;
+  overflow-y:auto;
+  padding:0 0 12px;
+}
+
+.lang-category {
+  margin-top:10px;
+}
+
+.lang-cat-title {
+  padding:4px 14px;
+  font-size:0.58rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--accent);
+  font-weight:600;
+}
+
+.lang-item {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 14px;
+  cursor:pointer;
+  font-size:0.83rem;
+  color:var(--text2);
+  transition:all 0.15s;
+  border-left:2px solid transparent;
+}
+.lang-item:hover { background:var(--bg3);color:var(--text); }
+.lang-item.active {
+  background:color-mix(in srgb,var(--accent) 12%,transparent);
+  color:var(--accent);
+  border-left-color:var(--accent);
+  font-weight:600;
+}
+
+.lang-icon {
+  width:20px;height:20px;
+  border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;
+  font-weight:700;
+  flex-shrink:0;
+}
+
+.lang-badge {
+  margin-left:auto;
+  font-size:0.55rem;
+  padding:1px 5px;
+  border-radius:3px;
+  font-weight:700;
+  letter-spacing:0.05em;
+}
+.badge-run  { background:color-mix(in srgb,var(--green) 20%,transparent);color:var(--green); }
+.badge-syn  { background:color-mix(in srgb,var(--text3) 15%,transparent);color:var(--text3); }
+
+/* ═══════════════════════════════════════════
+   CENTER — EDITOR AREA
+═══════════════════════════════════════════ */
+#center {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  min-width:0;
+}
+
+/* Tabs */
+#tabs-bar {
+  height:var(--tabs-h);
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:flex-end;
+  padding:0 0 0 8px;
+  gap:2px;
+  overflow-x:auto;
+  flex-shrink:0;
+}
+#tabs-bar::-webkit-scrollbar { height:2px; }
+
+.tab {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:0 12px;
+  height:28px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-bottom:none;
+  border-radius:5px 5px 0 0;
+  cursor:pointer;
+  font-size:0.78rem;
+  color:var(--text3);
+  white-space:nowrap;
+  transition:all 0.15s;
+  flex-shrink:0;
+}
+.tab:hover { color:var(--text);background:var(--bg3); }
+.tab.active {
+  background:var(--bg3);
+  color:var(--text);
+  border-bottom:1px solid var(--bg3);
+  margin-bottom:-1px;
+}
+.tab-close {
+  font-size:0.7rem;
+  color:var(--text3);
+  width:14px;height:14px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:3px;
+  transition:all 0.15s;
+}
+.tab-close:hover { background:var(--red);color:#fff; }
+
+#add-tab {
+  padding:0 10px;
+  height:28px;
+  background:none;
+  border:none;
+  color:var(--text3);
+  font-size:1rem;
+  cursor:pointer;
+  border-radius:5px 5px 0 0;
+  transition:all 0.15s;
+}
+#add-tab:hover { color:var(--accent);background:var(--bg3); }
+
+/* Editor pane */
+#editor-pane {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* CodeMirror overrides */
+.CodeMirror {
+  flex:1 !important;
+  height:100% !important;
+  font-family:var(--font-mono) !important;
+  font-size:13.5px !important;
+  line-height:1.65 !important;
+  background:var(--bg3) !important;
+  color:var(--text) !important;
+}
+.CodeMirror-gutters {
+  background:var(--bg) !important;
+  border-right:1px solid var(--border) !important;
+}
+.CodeMirror-linenumber { color:var(--text3) !important;padding:0 10px !important; }
+.CodeMirror-cursor { border-left:2px solid var(--accent) !important; }
+.CodeMirror-selected { background:color-mix(in srgb,var(--accent) 20%,transparent) !important; }
+.CodeMirror-activeline-background { background:color-mix(in srgb,var(--surface) 50%,transparent) !important; }
+.CodeMirror-matchingbracket { color:var(--yellow) !important;font-weight:700; }
+.CodeMirror-foldgutter { width:13px; }
+.CodeMirror-foldgutter-open,.CodeMirror-foldgutter-folded { color:var(--text3);cursor:pointer; }
+.CodeMirror-foldmarker { color:var(--accent2);font-size:0.75em; }
+.cm-s-devlab .cm-keyword    { color:var(--accent)   !important; }
+.cm-s-devlab .cm-atom       { color:var(--orange)   !important; }
+.cm-s-devlab .cm-number     { color:var(--orange)   !important; }
+.cm-s-devlab .cm-string     { color:var(--yellow)   !important; }
+.cm-s-devlab .cm-string-2   { color:var(--yellow)   !important; }
+.cm-s-devlab .cm-comment    { color:var(--text3)    !important;font-style:italic; }
+.cm-s-devlab .cm-variable   { color:var(--text)     !important; }
+.cm-s-devlab .cm-variable-2 { color:var(--teal)     !important; }
+.cm-s-devlab .cm-variable-3 { color:var(--pink)     !important; }
+.cm-s-devlab .cm-def        { color:var(--accent2)  !important; }
+.cm-s-devlab .cm-builtin    { color:var(--teal)     !important; }
+.cm-s-devlab .cm-tag        { color:var(--red)      !important; }
+.cm-s-devlab .cm-attribute  { color:var(--orange)   !important; }
+.cm-s-devlab .cm-property   { color:var(--teal)     !important; }
+.cm-s-devlab .cm-type       { color:var(--pink)     !important; }
+.cm-s-devlab .cm-operator   { color:var(--accent2)  !important; }
+.cm-s-devlab .cm-meta       { color:var(--text2)    !important; }
+.cm-s-devlab .cm-qualifier  { color:var(--pink)     !important; }
+
+#editor-wrap {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+#editor-wrap .CodeMirror { flex:1; }
+
+/* ═══════════════════════════════════════════
+   TERMINAL OUTPUT
+═══════════════════════════════════════════ */
+#terminal-area {
+  border-top:1px solid var(--border);
+  background:var(--bg2);
+  display:flex;
+  flex-direction:column;
+  flex-shrink:0;
+  transition:height 0.2s;
+}
+
+#terminal-toolbar {
+  height:32px;
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  padding:0 12px;
+  gap:8px;
+  flex-shrink:0;
+}
+
+.term-tab {
+  font-size:0.7rem;
+  padding:3px 10px;
+  border-radius:4px;
+  cursor:pointer;
+  color:var(--text3);
+  transition:all 0.15s;
+}
+.term-tab:hover { color:var(--text); }
+.term-tab.active { background:var(--bg3);color:var(--text); }
+
+.term-spacer { flex:1; }
+
+.term-action {
+  background:none;
+  border:none;
+  color:var(--text3);
+  font-size:0.72rem;
+  cursor:pointer;
+  padding:3px 8px;
+  border-radius:4px;
+  transition:all 0.15s;
+}
+.term-action:hover { color:var(--text);background:var(--surface); }
+
+#terminal-output {
+  flex:1;
+  overflow-y:auto;
+  padding:10px 14px;
+  font-family:var(--font-mono);
+  font-size:12.5px;
+  line-height:1.7;
+  min-height:0;
+}
+
+.term-line { display:flex;gap:8px;align-items:flex-start; }
+.term-prompt { color:var(--text3);flex-shrink:0;user-select:none; }
+.term-out  { color:var(--text); }
+.term-err  { color:var(--red); }
+.term-ok   { color:var(--green); }
+.term-info { color:var(--accent2); }
+.term-warn { color:var(--yellow); }
+.term-result { color:var(--teal);font-style:italic; }
+.term-table { color:var(--text);overflow-x:auto;width:100%; }
+.term-table table { border-collapse:collapse;margin:4px 0; }
+.term-table th { padding:4px 12px;border:1px solid var(--border);color:var(--accent);font-size:0.75rem; }
+.term-table td { padding:3px 12px;border:1px solid var(--border);font-size:0.75rem; }
+
+#term-preview {
+  display:none;
+  flex:1;
+  overflow:hidden;
+}
+#term-preview iframe {
+  width:100%;
+  height:100%;
+  border:none;
+  background:#fff;
+}
+
+#term-input-line {
+  display:flex;
+  align-items:center;
+  padding:6px 14px;
+  border-top:1px solid var(--border);
+  gap:8px;
+  flex-shrink:0;
+}
+#term-prompt-sym { color:var(--green);font-family:var(--font-mono);font-size:0.82rem; }
+#term-input {
+  flex:1;
+  background:none;
+  border:none;
+  color:var(--text);
+  font-family:var(--font-mono);
+  font-size:0.82rem;
+  outline:none;
+}
+
+/* ═══════════════════════════════════════════
+   RIGHT PANEL — REFERENCE
+═══════════════════════════════════════════ */
+#ref-panel {
+  width:var(--ref-w);
+  background:var(--bg);
+  border-left:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  flex-shrink:0;
+  transition:width 0.2s;
+}
+#ref-panel.collapsed { width:0;border:none; }
+
+#ref-header {
+  padding:10px 14px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-shrink:0;
+}
+.ref-title-text {
+  font-size:0.62rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--text3);
+}
+.ref-lang-name { font-size:0.85rem;font-weight:700;color:var(--accent); }
+
+#ref-tabs {
+  display:flex;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.ref-tab {
+  flex:1;
+  padding:7px 0;
+  text-align:center;
+  font-size:0.68rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--text3);
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all 0.15s;
+}
+.ref-tab:hover { color:var(--text); }
+.ref-tab.active { color:var(--accent);border-bottom-color:var(--accent); }
+
+#ref-content {
+  flex:1;
+  overflow-y:auto;
+  padding:12px;
+}
+
+.ref-section { margin-bottom:16px; }
+.ref-section-title {
+  font-size:0.6rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--text3);
+  margin-bottom:6px;
+  padding-bottom:4px;
+  border-bottom:1px solid var(--border);
+}
+
+.ref-card {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:8px 10px;
+  margin-bottom:6px;
+  cursor:pointer;
+  transition:border 0.15s;
+}
+.ref-card:hover { border-color:var(--accent2); }
+
+.ref-card-title {
+  font-size:0.72rem;
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:4px;
+}
+.ref-card-code {
+  font-family:var(--font-mono);
+  font-size:0.68rem;
+  color:var(--accent2);
+  line-height:1.6;
+  white-space:pre;
+  overflow-x:auto;
+}
+.ref-card-desc { font-size:0.68rem;color:var(--text3);margin-top:4px; }
+
+/* Snippet click feedback */
+.ref-card.copied { border-color:var(--green); }
+
+/* ═══════════════════════════════════════════
+   STATUS BAR
+═══════════════════════════════════════════ */
+#statusbar {
+  height:var(--status-h);
+  background:var(--accent);
+  color:#000;
+  display:flex;
+  align-items:center;
+  padding:0 14px;
+  gap:16px;
+  font-size:0.68rem;
+  font-weight:600;
+  letter-spacing:0.08em;
+  flex-shrink:0;
+  overflow:hidden;
+}
+.sb-item { display:flex;align-items:center;gap:4px; }
+.sb-sep { color:rgba(0,0,0,0.3); }
+#sb-cursor { margin-left:auto; }
+
+/* ═══════════════════════════════════════════
+   THEME PANEL (OVERLAY)
+═══════════════════════════════════════════ */
+#theme-overlay {
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.6);
+  z-index:1000;
+  align-items:center;
+  justify-content:center;
+}
+#theme-overlay.open { display:flex; }
+
+#theme-modal {
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:24px;
+  width:680px;
+  max-width:95vw;
+  max-height:85vh;
+  overflow-y:auto;
+  animation:pop 0.2s ease;
+}
+@keyframes pop { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
+
+.modal-title {
+  font-size:1.1rem;
+  font-weight:700;
+  margin-bottom:6px;
+}
+.modal-sub { font-size:0.78rem;color:var(--text3);margin-bottom:20px; }
+.modal-close-btn {
+  float:right;
+  background:none;border:none;
+  color:var(--text3);font-size:1.3rem;
+  cursor:pointer;margin-top:-4px;
+}
+
+.theme-group-title {
+  font-size:0.62rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin:16px 0 10px;
+}
+
+.theme-grid {
+  display:grid;
+  grid-template-columns:repeat(5, 1fr);
+  gap:8px;
+}
+
+.theme-swatch {
+  border-radius:8px;
+  padding:10px 8px;
+  cursor:pointer;
+  border:2px solid transparent;
+  transition:all 0.2s;
+  text-align:center;
+}
+.theme-swatch:hover { transform:translateY(-2px);border-color:var(--text2); }
+.theme-swatch.active { border-color:var(--accent); }
+
+.theme-preview {
+  height:36px;
+  border-radius:5px;
+  margin-bottom:6px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  gap:2px;
+  padding:4px;
+}
+.tp-col { flex:1;border-radius:3px; }
+
+.theme-name {
+  font-size:0.62rem;
+  font-weight:600;
+  color:var(--text);
+}
+.theme-type {
+  font-size:0.55rem;
+  color:var(--text3);
+  margin-top:1px;
+}
+
+/* ═══════════════════════════════════════════
+   KEYBOARD SHORTCUTS PANEL
+═══════════════════════════════════════════ */
+#shortcuts-overlay {
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.6);
+  z-index:1000;
+  align-items:center;
+  justify-content:center;
+}
+#shortcuts-overlay.open { display:flex; }
+#shortcuts-modal {
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:24px;
+  width:520px;
+  max-width:95vw;
+  animation:pop 0.2s ease;
+}
+.kbd {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:1px 6px;
+  font-family:var(--font-mono);
+  font-size:0.7rem;
+}
+.shortcut-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:7px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.82rem;
+}
+.shortcut-row:last-child { border-bottom:none; }
+
+/* ═══════════════════════════════════════════
+   RESIZE HANDLE
+═══════════════════════════════════════════ */
+#resize-handle {
+  height:4px;
+  background:var(--border);
+  cursor:ns-resize;
+  flex-shrink:0;
+  transition:background 0.2s;
+}
+#resize-handle:hover { background:var(--accent); }
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS & MISC
+═══════════════════════════════════════════ */
+.fade-in { animation:fadeIn 0.3s ease; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+.typing-cursor::after {
+  content:'|';
+  animation:blink 1s step-end infinite;
+  color:var(--accent);
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* Logo in topbar */
+#devlab-logo {
+  font-family:var(--font-mono);
+  font-size:0.9rem;
+  font-weight:700;
+  color:var(--accent);
+  letter-spacing:-0.02em;
+  white-space:nowrap;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+#devlab-logo .logo-bracket { color:var(--text3); }
+
+/* Collapsible sidebar toggle */
+#sidebar-toggle {
+  background:none;border:none;
+  color:var(--text3);font-size:0.9rem;
+  cursor:pointer;padding:2px;
+  border-radius:3px;
+  transition:all 0.15s;
+}
+#sidebar-toggle:hover { color:var(--text); }
+
+/* Run indicator dot */
+.run-dot {
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--green);
+  display:inline-block;
+  margin-right:4px;
+}
+.run-dot.running { background:var(--yellow);animation:pulse 0.6s ease infinite; }
+
+/* Terminal size handle */
+#terminal-area { height:220px; }
+
+/* Empty state */
+.empty-state {
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  height:100%;color:var(--text3);
+  font-size:0.85rem;gap:8px;
+}
+.empty-state .big { font-size:2rem; }
+
+/* Welcome message */
+.welcome-art {
+  font-family:var(--font-mono);
+  font-size:0.72rem;
+  color:var(--accent2);
+  line-height:1.5;
+  margin-bottom:8px;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ TOP BROWSER BAR ═══════════ -->
+<div id="topbar">
+  <div id="devlab-logo">
+    <span class="logo-bracket">[</span>DevLab<span class="logo-bracket">]</span>
+  </div>
+
+  <div class="traffic-lights">
+    <div class="tl tl-red" title="Close" onclick="alert('💡 Tip: Bookmark this page!')"></div>
+    <div class="tl tl-yellow" title="Minimize" onclick="toggleSidebar()"></div>
+    <div class="tl tl-green" title="Fullscreen" onclick="toggleFullscreen()"></div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="nav-btn" title="Back (Alt+←)" onclick="historyBack()">‹</button>
+    <button class="nav-btn" title="Forward (Alt+→)" onclick="historyForward()">›</button>
+    <button class="nav-btn" title="New Tab (Ctrl+T)" onclick="newTab()">+</button>
+  </div>
+
+  <div class="url-wrap">
+    <span class="url-lock">🔒</span>
+    <input id="url-bar" value="devlab://javascript" readonly onclick="this.select()" title="Current language"/>
+  </div>
+
+  <div class="topbar-right">
+    <button id="run-btn" onclick="runCode()" title="Run code (F5 or Ctrl+Enter)">
+      <span class="run-dot" id="run-dot">▶</span> Run
+    </button>
+    <button class="tb-btn" onclick="openThemes()" title="Switch theme">🎨 Theme</button>
+    <button class="tb-btn" onclick="openShortcuts()" title="Keyboard shortcuts">⌨ Keys</button>
+    <button class="tb-btn" onclick="toggleRefPanel()" id="ref-toggle-btn">📖 Ref</button>
+    <button class="tb-btn" onclick="clearTerminal()">⊘ Clear</button>
+    <span id="theme-indicator">Catppuccin Mocha</span>
+  </div>
+</div>
+
+<!-- ═══════════ MAIN APP ═══════════ -->
+<div id="app">
+
+  <!-- ── LEFT SIDEBAR ── -->
+  <div id="sidebar">
+    <div id="sidebar-header">
+      <span class="sidebar-title">Extensions</span>
+      <button id="sidebar-toggle" onclick="toggleSidebar()" title="Collapse">◀</button>
+    </div>
+
+    <div class="search-icon" style="padding:8px 14px 4px;">
+      <input id="lang-search" placeholder="Search languages..."/>
+    </div>
+
+    <div id="lang-list">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- ── CENTER EDITOR ── -->
+  <div id="center">
+    <!-- File Tabs -->
+    <div id="tabs-bar">
+      <!-- Populated by JS -->
+      <button id="add-tab" onclick="newTab()" title="New tab (Ctrl+T)">＋</button>
+    </div>
+
+    <!-- Editor + Terminal -->
+    <div id="editor-pane">
+      <div id="editor-wrap">
+        <textarea id="code-editor"></textarea>
+      </div>
+
+      <!-- Resize handle -->
+      <div id="resize-handle" id="resize-h"></div>
+
+      <!-- Terminal -->
+      <div id="terminal-area">
+        <div id="terminal-toolbar">
+          <span class="term-tab active" onclick="switchTermTab('output',this)" id="tt-output">Output</span>
+          <span class="term-tab" onclick="switchTermTab('preview',this)" id="tt-preview">Preview</span>
+          <span class="term-tab" onclick="switchTermTab('console',this)" id="tt-console">Console</span>
+          <div class="term-spacer"></div>
+          <button class="term-action" onclick="clearTerminal()">Clear</button>
+          <button class="term-action" onclick="toggleTermSize()">⇅</button>
+        </div>
+        <div id="terminal-output">
+          <div class="welcome-art">
+  ╔══════════════════════════════════════╗
+  ║      DevLab — Programmer's Lab       ║
+  ║  Select a language → Write → Run ▶  ║
+  ╚══════════════════════════════════════╝</div>
+          <div class="term-line"><span class="term-info">Ready. Select a language from the sidebar and press ▶ Run.</span></div>
+          <div class="term-line"><span class="term-info">Supported live execution: JavaScript, HTML/CSS, SQL, Python</span></div>
+        </div>
+        <div id="term-preview" style="display:none;">
+          <iframe id="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+        </div>
+        <div id="term-input-line">
+          <span id="term-prompt-sym">›</span>
+          <input id="term-input" placeholder="Interactive input... (JS expressions, SQL queries)" autocomplete="off"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT REFERENCE PANEL ── -->
+  <div id="ref-panel">
+    <div id="ref-header">
+      <div>
+        <div class="ref-title-text">Reference</div>
+        <div class="ref-lang-name" id="ref-lang-name">JavaScript</div>
+      </div>
+      <button onclick="toggleRefPanel()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:1rem;">✕</button>
+    </div>
+    <div id="ref-tabs">
+      <span class="ref-tab active" onclick="switchRefTab('snippets',this)">Snippets</span>
+      <span class="ref-tab" onclick="switchRefTab('syntax',this)">Syntax</span>
+      <span class="ref-tab" onclick="switchRefTab('tips',this)">Tips</span>
+    </div>
+    <div id="ref-content">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+</div><!-- end #app -->
+
+<!-- ═══════════ STATUS BAR ═══════════ -->
+<div id="statusbar">
+  <span class="sb-item" id="sb-lang">⚡ JavaScript</span>
+  <span class="sb-sep">│</span>
+  <span class="sb-item" id="sb-theme">🎨 Catppuccin Mocha</span>
+  <span class="sb-sep">│</span>
+  <span class="sb-item" id="sb-encoding">UTF-8</span>
+  <span class="sb-sep">│</span>
+  <span class="sb-item" id="sb-indent">2 spaces</span>
+  <span class="sb-sep">│</span>
+  <span class="sb-item" id="sb-lines">Lines: 1</span>
+  <span class="sb-cursor" id="sb-cursor">Ln 1, Col 1</span>
+</div>
+
+<!-- ═══════════ THEME MODAL ═══════════ -->
+<div id="theme-overlay" onclick="closeOverlay(event,'theme-overlay')">
+  <div id="theme-modal">
+    <button class="modal-close-btn" onclick="closeThemes()">✕</button>
+    <div class="modal-title">🎨 Choose Theme</div>
+    <div class="modal-sub">30 handcrafted themes — 20 dark · 10 light</div>
+    <div id="theme-dark-grid"></div>
+    <div id="theme-light-grid"></div>
+  </div>
+</div>
+
+<!-- ═══════════ SHORTCUTS MODAL ═══════════ -->
+<div id="shortcuts-overlay" onclick="closeOverlay(event,'shortcuts-overlay')">
+  <div id="shortcuts-modal">
+    <button class="modal-close-btn" onclick="document.getElementById('shortcuts-overlay').classList.remove('open')">✕</button>
+    <div class="modal-title" style="margin-bottom:16px;">⌨ Keyboard Shortcuts</div>
+    <div class="shortcut-row"><span>Run code</span><span><kbd class="kbd">F5</kbd> or <kbd class="kbd">Ctrl+Enter</kbd></span></div>
+    <div class="shortcut-row"><span>New tab</span><span><kbd class="kbd">Ctrl+T</kbd></span></div>
+    <div class="shortcut-row"><span>Close tab</span><span><kbd class="kbd">Ctrl+W</kbd></span></div>
+    <div class="shortcut-row"><span>Clear terminal</span><span><kbd class="kbd">Ctrl+L</kbd></span></div>
+    <div class="shortcut-row"><span>Toggle sidebar</span><span><kbd class="kbd">Ctrl+B</kbd></span></div>
+    <div class="shortcut-row"><span>Toggle reference panel</span><span><kbd class="kbd">Ctrl+Shift+R</kbd></span></div>
+    <div class="shortcut-row"><span>Open theme picker</span><span><kbd class="kbd">Ctrl+Shift+T</kbd></span></div>
+    <div class="shortcut-row"><span>Format code (JS)</span><span><kbd class="kbd">Ctrl+Shift+F</kbd></span></div>
+    <div class="shortcut-row"><span>Comment line</span><span><kbd class="kbd">Ctrl+/</kbd></span></div>
+    <div class="shortcut-row"><span>Find</span><span><kbd class="kbd">Ctrl+F</kbd></span></div>
+    <div class="shortcut-row"><span>Increase font size</span><span><kbd class="kbd">Ctrl++</kbd></span></div>
+    <div class="shortcut-row"><span>Decrease font size</span><span><kbd class="kbd">Ctrl+-</kbd></span></div>
+    <div class="shortcut-row"><span>Insert snippet</span><span><kbd class="kbd">Tab</kbd> (after trigger)</span></div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<!-- Language Modes -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/shell/shell.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/ruby/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/rust/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/go/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/php/php.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/markdown/markdown.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/yaml/yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/swift/swift.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/r/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/lua/lua.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/perl/perl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/haskell/haskell.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/dart/dart.min.js"></script>
+<!-- Addons -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closetag.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/brace-fold.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/indent-fold.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/searchcursor.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/search.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/selection/active-line.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/javascript-hint.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/sql-hint.min.js"></script>
+<!-- Skulpt for Python -->
+<script src="https://skulpt.org/js/skulpt.min.js" crossorigin="anonymous"></script>
+<script src="https://skulpt.org/js/skulpt-stdlib.js" crossorigin="anonymous"></script>
+<!-- App scripts -->
+<script src="languages.js"></script>
+<script src="sql-engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
